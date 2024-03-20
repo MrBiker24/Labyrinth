@@ -1,19 +1,23 @@
-public class Door extends Block {
+package tile;
+
+import Items.Key;
+
+public class Door_old extends Block_old {
     private boolean locked, open;
     private int lockPickingLevel;
     private Key key;
 
-    public Door(int lockPickingLevel, boolean rotated){
-        super("door", new BlockProperties(rotated));
+    public Door_old(int lockPickingLevel, boolean rotated){
+        super("door", new BlockProperties_old(rotated));
 
-        loadTexture(getImagePath(rotated));
+        //loadTexture(getImagePath(rotated));
         setLockPickingLevel(lockPickingLevel);
     }
 
     private String getImagePath(boolean flag) {
-        String path = "src/com/roleplay/resources/images/door.png";
+        String path = "resources/images/door.png";
 
-        if (flag) path = "src/com/roleplay/resources/images/doorRotated.png";
+        if (flag) path = "resources/images/doorRotated.png";
 
         return path;
     }
@@ -53,7 +57,7 @@ public class Door extends Block {
     }
 
     public boolean unlock(Key key) {
-        if (!key.getName().equalsIgnoreCase(this.key.getName())) return false;
+        //if (!key.getName().equalsIgnoreCase(this.key.getName())) return false;
 
         locked = false;
 

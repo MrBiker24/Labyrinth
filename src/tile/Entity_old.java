@@ -1,18 +1,20 @@
+package tile;
+
 import java.awt.*;
 
-public class Entity extends Tile {
+public class Entity_old extends Tile {
     private Rectangle hitBox;
     private boolean canCollide = true;
 
-    public Entity(String name, boolean canCollide) {
-        super(name);
+    public Entity_old(String name, boolean canCollide) {
+        //super(name);
 
         collidable(canCollide);
 
-        hitBox = new Rectangle(getPosition().x, getPosition().y, 32, 32);
+        //hitBox = new Rectangle(getPosition().x, getPosition().y, 32, 32);
     }
 
-    public Entity(String name) {
+    public Entity_old(String name) {
         this(name, true);
     }
 

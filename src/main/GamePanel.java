@@ -1,26 +1,31 @@
+package main;
+
+import player.KeyHandler;
+import player.Player;
+import tile.TileManager;
+
 import javax.swing.*;
-import javax.xml.datatype.Duration;
 import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
     static final int originalTileSize = 16;
     static final int scale = 3;
-    static final int tileSize = originalTileSize * scale;
+    public final int tileSize = originalTileSize * scale;
     final int maxScreenCol = 16;
-    final int maxScreenRow = 16;
+    final int maxScreenRow = 12;
     final int screenWidth = tileSize * maxScreenCol;
     final int screenHeight = tileSize * maxScreenRow;
 
     Player player;
     Thread game;
+    KeyHandler keyHandler = new KeyHandler();
 
-    int playerPositionX = 1;
-    int playerPositionY = 1;
-    int playerSpeed = 1;
+    TileManager tileManager;
 
     public GamePanel() {
-        this.player = new Player(new CharacterBuilder());
+        this.player = new Player(this, keyHandler);
+        this.tileManager = new TileManager(this);
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -30,11 +35,8 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void startGame() {
-
         game = new Thread(this);
         game.start();
-
-
     }
 
 
@@ -57,23 +59,18 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        if (Direction.NORTH.getValue()) {
-            playerPositionY -= playerSpeed;
-        } else if (Direction.SOUTH.getValue()) {
-            playerPositionY += playerSpeed;
-        } else if (Direction.WEST.getValue()) {
-            playerPositionX -= playerSpeed;
-        } else if (Direction.EAST.getValue()) {
-            playerPositionX += playerSpeed;
-        }
+        player.update();
     }
 
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
         Graphics2D graphics2D = (Graphics2D) graphics;
-        graphics2D.setColor(Color.BLUE);
-        graphics2D.fillRect(playerPositionX, playerPositionY, tileSize, tileSize);
+
+        tileManager.draw(graphics2D);
+
+        player.draw(graphics2D);
+
         graphics2D.dispose();
     }
 }

@@ -1,4 +1,5 @@
-import java.awt.*;
+package tile;
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,23 +7,23 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Random;
 
-public class MapCreator {
+public class MapCreator_old {
 
-    private static Block[][] map;
+    private static Block_old[][] map;
 
-    public MapCreator(BufferedImage img, int rows, int columns, int tileSize) {
+    public MapCreator_old(BufferedImage img, int rows, int columns, int tileSize) {
         createTiles(img, rows, columns, tileSize);
     }
 
     private void createTiles(BufferedImage img, int rows, int columns, int tileSize) {
 
-        map = new Block[rows][columns];
+        map = new Block_old[rows][columns];
         try {
             Random random = new Random();
             List<String> lines = switch (random.nextInt(1)) {
-                case 0 -> Files.readAllLines(Paths.get("src/com/roleplay/resources/maps/map.txt"));
-                case 1 -> Files.readAllLines(Paths.get("src/com/roleplay/resources/maps/map1.txt"));
-                case 2 -> Files.readAllLines(Paths.get("src/com/roleplay/resources/maps/map2.txt"));
+                case 0 -> Files.readAllLines(Paths.get("resources/maps/test.map.txt"));
+                case 1 -> Files.readAllLines(Paths.get("resources/maps/map1.txt"));
+                case 2 -> Files.readAllLines(Paths.get("resources/maps/map2.txt"));
                 default -> throw new IllegalStateException("Unexpected value: " + random.nextInt(1));
             };
 
@@ -32,28 +33,28 @@ public class MapCreator {
                 System.out.println(text);
 
                 for (int j = 0; j < columns; j++) {
-                    Block block = null;
+                    Block_old block = null;
 
                     switch (Character.getNumericValue(text.charAt(j))) {
                         case 0 -> {
-                            block = new Block("wall_block");
-                            block.loadTexture("src/com/roleplay/resources/images/background.png");
+                            block = new Block_old("wall_block");
+                            //block.loadTexture("resources/images/background.png");
                         }
                         case 1 -> {
-                            block = new Block("way_block");
-                            block.loadTexture("src/com/roleplay/resources/images/way.png");
+                            block = new Block_old("way_block");
+                            //block.loadTexture("resources/images/way.png");
                         }
                         case 2 -> {
-                            block = new Block("water_block");
-                            block.loadTexture("src/com/roleplay/resources/images/water.png");
+                            block = new Block_old("water_block");
+                            //block.loadTexture("resources/images/water.png");
                         }
-                        case 3 -> block = new Door(1, false);
-                        case 4 -> block = new Door(1, true);
+                        case 3 -> block = new Door_old(1, false);
+                        case 4 -> block = new Door_old(1, true);
                         default ->
                                 throw new IllegalStateException("Unexpected value: " + Character.getNumericValue(text.charAt(j)));
                     }
 
-                    block.setPosition(new Point(i, j));
+                    //block.setPosition(new Point(i, j));
 
                     map[i][j] = block;
                 }
@@ -64,7 +65,7 @@ public class MapCreator {
 
         for (int i = 0; i < map[0].length; i++) {
             for (int j = 0; j < map.length; j++) {
-                final BufferedImage tile = map[j][i].getImage();
+                final BufferedImage tile = null; //= map[j][i].getImage();
 
                 if (tile == null) continue;
 
@@ -77,7 +78,7 @@ public class MapCreator {
         }
     }
 
-    public static Block[][] getMap() {
+    public static Block_old[][] getMap() {
         return map;
     }
 }

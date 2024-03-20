@@ -1,9 +1,13 @@
+package Items;
+
+import tile.Tile;
+
 public abstract class Item extends Tile implements Cloneable {
     private String displayName;
     private double weight;
 
     public Item(String name, double weight) {
-        super(name);
+        //super(name);
         setWeight(weight);
     }
 
@@ -29,7 +33,7 @@ public abstract class Item extends Tile implements Cloneable {
     public abstract Item clone();
 
     protected static void clone(Item newItem, Item oldItem) {
-        newItem.setPosition(oldItem.getPosition());
+        //newItem.setPosition(oldItem.getPosition());
         newItem.setDisplayName(oldItem.getDisplayName());
     }
 }

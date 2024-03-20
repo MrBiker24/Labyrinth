@@ -1,12 +1,16 @@
+package tile;
+
+import tools.Image;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public class Tile {
+public class Tile_old {
     private String name;
     private Point position = new Point();
     private BufferedImage image;
 
-    public Tile(String name) {
+    public Tile_old(String name) {
         setName(name);
     }
 
@@ -31,7 +35,7 @@ public class Tile {
     }
 
     public void setTexture(BufferedImage image) {
-        //if (image == null) throw new IllegalArgumentException("Image cannot be null!");
+        //if (image == null) throw new IllegalArgumentException("tools.Image cannot be null!");
 
         this.image = image;
     }
