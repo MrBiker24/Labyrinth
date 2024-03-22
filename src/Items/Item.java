@@ -1,39 +1,30 @@
 package Items;
 
-import tile.Tile;
+import main.GamePanel;
 
-public abstract class Item extends Tile implements Cloneable {
-    private String displayName;
-    private double weight;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
-    public Item(String name, double weight) {
-        //super(name);
-        setWeight(weight);
+public class Item {
+    public BufferedImage image;
+
+    public String name;
+    public boolean coolision = false;
+
+    public Rectangle rectangleItem = new Rectangle();
+
+    public Item(int height, int width){
+        this.rectangleItem.height = height;
+        this.rectangleItem.width = width;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
+    public void draw(Graphics2D graphics2D, GamePanel gamePanel, boolean door) {
 
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
+        if (door) {
+            graphics2D.drawImage(image, this.rectangleItem.x, this.rectangleItem.y, gamePanel.tileSize, gamePanel.tileSize, null);
+        }else {
+            graphics2D.drawImage(image, this.rectangleItem.x, this.rectangleItem.y, gamePanel.tileSize / 2, gamePanel.tileSize / 2, null);
 
-    public double getWeight() {
-        return weight;
-    }
-
-    private void setWeight(double weight) {
-        if (weight < 0) throw new IllegalArgumentException("Weight cannot be less than 0!");
-
-        this.weight = weight;
-    }
-
-    @Override
-    public abstract Item clone();
-
-    protected static void clone(Item newItem, Item oldItem) {
-        //newItem.setPosition(oldItem.getPosition());
-        newItem.setDisplayName(oldItem.getDisplayName());
+        }
     }
 }

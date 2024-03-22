@@ -4,13 +4,13 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.Objects;
 
-public class Key extends Item {
+public class Door extends Item {
 
-    public Key() {
-        super(16,16);
-        name = "Key";
+    public Door() {
+        super(32, 5);
+        name = "Door";
         try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/key_32x32.png")));
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/door.png")));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -19,4 +19,6 @@ public class Key extends Item {
         coolision = true;
     }
 
+
 }
+
