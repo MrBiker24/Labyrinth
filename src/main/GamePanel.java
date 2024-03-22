@@ -23,8 +23,8 @@ public class GamePanel extends JPanel implements Runnable {
     public Player player;
     Thread game;
     KeyHandler keyHandler = new KeyHandler();
-    public Item items[] = new Item[7];
-    public Item doors[] = new Item[50];
+    public Item[] items = new Item[7];
+    public Item[] doors = new Item[50];
 
     public ItemSetter itemSetter;
     public CollisionChecker collisionChecker;

@@ -26,8 +26,8 @@ public class Lighting {
 
         Area screenArea = new Area(new Rectangle2D.Double(0, 0, gamePanel.screenWidth, gamePanel.screenHeight));
 
-        double centerX = (gamePanel.player.playerPositionX + (gamePanel.tileSize) / 2);
-        double centerY = (gamePanel.player.playerPositionY + (gamePanel.tileSize) / 2);
+        double centerX = (gamePanel.player.playerPositionX + (double) (gamePanel.tileSize) / 2);
+        double centerY = (gamePanel.player.playerPositionY + (double) (gamePanel.tileSize) / 2);
 
         double x = centerX - ((double) circleSize / 2);
         double y = centerY - ((double) circleSize / 2);
@@ -68,7 +68,7 @@ public class Lighting {
         fraction[11] = 1f;
 
         // Create a gradation paint settings
-        RadialGradientPaint gPaint = new RadialGradientPaint((float) centerX, (float) centerY, (circleSize / 2), fraction, color);
+        RadialGradientPaint gPaint = new RadialGradientPaint((float) centerX, (float) centerY, ((float) circleSize / 2), fraction, color);
 
         // Set the gradient data on g2
         g2.setPaint(gPaint);

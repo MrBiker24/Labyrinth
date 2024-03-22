@@ -16,7 +16,7 @@ public class TileManager {
     public GamePanel gamePanel;
     public Tile[] tile;
 
-    public int mapTileNum[][];
+    public int[][] mapTileNum;
 
     public TileManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -83,6 +83,7 @@ public class TileManager {
     public void loadMap(String map) {
         try {
             InputStream is = getClass().getResourceAsStream(map);
+            assert is != null;
             BufferedReader br = new BufferedReader(new InputStreamReader((is)));
 
             int col = 0;
@@ -94,7 +95,7 @@ public class TileManager {
 
                 while (col < gamePanel.maxScreenCol) {
 
-                    String numbers[] = line.split("");
+                    String[] numbers = line.split("");
                     int num = Integer.parseInt(numbers[col]);
 
                     mapTileNum[col][row] = num;
