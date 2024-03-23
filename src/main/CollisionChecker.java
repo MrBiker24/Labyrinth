@@ -18,7 +18,7 @@ public class CollisionChecker {
 
     public void checkTile(Entity entity) {
 
-        if ((Direction.NORTH.getValue() && entity.playerPositionY == 0) || (Direction.WEST.getValue() && entity.playerPositionX == 0)) {
+        if ((Direction.NORTH.getValue() && entity.playerPositionY == 0) || (Direction.WEST.getValue() && entity.playerPositionX == 0) || (Direction.SOUTH.getValue() && entity.playerPositionY == gamePanel.screenHeight) || (Direction.EAST.getValue() && entity.playerPositionX == gamePanel.screenWidth)) {
             entity.collisionOn = true;
             return;
         }

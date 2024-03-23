@@ -20,7 +20,7 @@ public class Lighting {
     }
 
     private void paintLightning() {
-        int circleSize = 200;
+        int circleSize = 100 * gamePanel.scale;
         darknessFilter = new BufferedImage(gamePanel.screenWidth, gamePanel.screenHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = (Graphics2D) darknessFilter.getGraphics();
 
@@ -52,7 +52,7 @@ public class Lighting {
         color[8] = new Color(0, 0, 0, 0.91f);
         color[9] = new Color(0, 0, 0, 0.94f);
         color[10] = new Color(0, 0, 0, 0.96f);
-        color[11] = new Color(0, 0, 0, 0.98f);
+        color[11] = new Color(0, 0, 0, 1.0f);
 
         fraction[0] = 0f;
         fraction[1] = 0.4f;
@@ -88,6 +88,6 @@ public class Lighting {
 
     public void draw(Graphics2D g2) {
         paintLightning();
-        g2.drawImage(darknessFilter, 0, 0, null);
+        //g2.drawImage(darknessFilter, 0, 0, null);
     }
 }

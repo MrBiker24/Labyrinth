@@ -34,10 +34,9 @@ public class Player extends Entity {
     public void getPlayerImage() {
 
         try {
-            up = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/fighter_32x32.png")));
-            down = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/fighter_32x32.png")));
-            left = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/fighter_32x32.png")));
-            right = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/fighter_32x32.png")));
+            stand = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/explorer.png")));
+            run1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/explorer1.png")));
+            run2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/explorer2.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -111,19 +110,42 @@ public class Player extends Entity {
         BufferedImage image;
 
         if (Direction.NORTH.getValue()) {
-            image = up;
+            if (runCount == 1) {
+                runCount = 2;
+            } else {
+                runCount = 1;
+            }
         } else if (Direction.SOUTH.getValue()) {
-            image = down;
+            if (runCount == 1) {
+                runCount = 2;
+            } else {
+                runCount = 1;
+            }
         } else if (Direction.WEST.getValue()) {
-            image = left;
+            if (runCount == 1) {
+                runCount = 2;
+            } else {
+                runCount = 1;
+            }
         } else if (Direction.EAST.getValue()) {
-            image = right;
+            if (runCount == 1) {
+                runCount = 2;
+            } else {
+                runCount = 1;
+            }
+        }
+        if (runCount == 1) {
+            image = run1;
+        } else if (runCount == 2) {
+            image = run2;
         } else {
-            image = up;
+            image = stand;
+
         }
 
-        graphics2D.drawImage(image, (int) playerPositionX, (int) playerPositionY, null);
-        //graphics2D.drawImage(image, playerPositionX, playerPositionY, gamePanel.tileSize, gamePanel.tileSize, null);
+
+        //graphics2D.drawImage(image, (int) playerPositionX, (int) playerPositionY,  null);
+        graphics2D.drawImage(image, (int) playerPositionX, (int) playerPositionY, rectanglePlayer.width, rectanglePlayer.height, null);
 
     }
 }

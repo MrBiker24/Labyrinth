@@ -26,16 +26,29 @@ public class TileManager {
 
         getTileImage();
 
-        loadMap(loadRandomMap());
+        //loadMap(loadRandomMap());
+        loadMap(loadMapByNumber(0));
     }
 
     private String loadRandomMap() {
         Random random = new Random();
-        return switch (random.nextInt(4)) {
+        return switch (random.nextInt(5)) {
             case 0 -> "/maps/map.txt";
             case 1 -> "/maps/map1.txt";
             case 2 -> "/maps/map2.txt";
-            case 3 -> "/maps/map1.txt";
+            case 3 -> "/maps/map3.txt";
+            case 4 -> "/maps/map4.txt";
+            default -> "/maps/map.txt";
+        };
+    }
+
+    public String loadMapByNumber(int mapCount) {
+        return switch (mapCount) {
+            case 0 -> "/maps/map.txt";
+            case 1 -> "/maps/map1.txt";
+            case 2 -> "/maps/map2.txt";
+            case 3 -> "/maps/map3.txt";
+            case 4 -> "/maps/map4.txt";
             default -> "/maps/map.txt";
         };
     }
