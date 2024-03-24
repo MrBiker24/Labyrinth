@@ -2,8 +2,8 @@ package tools;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.InputStream;
+import java.util.Objects;
 
 public class ImageUtils {
 
@@ -14,7 +14,7 @@ public class ImageUtils {
             return null;
         } else {
             try {
-                InputStream is = ImageUtils.class.getClassLoader().getResourceAsStream(pathname);
+                InputStream is = Objects.requireNonNull(ImageUtils.class.getResourceAsStream(pathname));
                 img = ImageIO.read(is);
                 is.close();
             } catch (Exception ex) {

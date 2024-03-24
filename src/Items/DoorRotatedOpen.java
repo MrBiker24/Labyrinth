@@ -1,20 +1,14 @@
 package Items;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.Objects;
+import gui.GamePanel;
+import tools.ImageUtils;
 
 public class DoorRotatedOpen extends Item {
 
     public DoorRotatedOpen() {
-        super(32,32);
+        super(GamePanel.tileSize, GamePanel.tileSize);
         name = "DoorRotatedOpen";
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/doorRotatedOpen.png")));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = ImageUtils.loadImage("/items/doorRotatedOpen.png");
 
         coolision = false;
     }

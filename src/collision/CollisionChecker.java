@@ -1,16 +1,17 @@
-package main;
+package collision;
 
 import Items.Door;
 import Items.DoorRotated;
 import Items.Item;
-import player.Direction;
+import gui.GamePanel;
 import player.Entity;
+import player.KeyEnum;
 
 import java.awt.*;
 
 public class CollisionChecker {
 
-    GamePanel gamePanel;
+    private final GamePanel gamePanel;
 
     public CollisionChecker(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
@@ -18,7 +19,7 @@ public class CollisionChecker {
 
     public void checkTile(Entity entity) {
 
-        if ((Direction.NORTH.getValue() && entity.playerPositionY == 0) || (Direction.WEST.getValue() && entity.playerPositionX == 0) || (Direction.SOUTH.getValue() && entity.playerPositionY == gamePanel.screenHeight) || (Direction.EAST.getValue() && entity.playerPositionX == gamePanel.screenWidth)) {
+        if ((KeyEnum.NORTH.getValue() && entity.playerPositionY <= 0) || (KeyEnum.WEST.getValue() && entity.playerPositionX <= 0) || (KeyEnum.SOUTH.getValue() && (entity.playerPositionY + entity.rectanglePlayer.height + entity.playerSpeed) >= gamePanel.screenHeight) || (KeyEnum.EAST.getValue() && (entity.playerPositionX + entity.rectanglePlayer.width + entity.playerSpeed) >= gamePanel.screenWidth)) {
             entity.collisionOn = true;
             return;
         }
@@ -40,41 +41,41 @@ public class CollisionChecker {
         final double playerRightArmYBottom = entity.playerPositionY + entity.rectanglePlayer.height;
 
 
-        if (Direction.NORTH.getValue()) {
-            int row = (int) ((playerHeadY - entity.playerSpeed) / gamePanel.tileSize);
-            int colLeft = (int) ((playerHeadXLeft + 1) / gamePanel.tileSize);
-            int colRight = (int) (playerHeadXRight - 1) / gamePanel.tileSize;
-            extracted(entity, row, row, colLeft, colRight);
-        } else if (Direction.SOUTH.getValue()) {
-            int row = (int) ((playerFeedY + entity.playerSpeed) / gamePanel.tileSize);
-            int colLeft = (int) (playerFeedXLeft + 1) / gamePanel.tileSize;
-            int colRight = (int) (playerFeedXRight - 1) / gamePanel.tileSize;
-            extracted(entity, row, row, colLeft, colRight);
-        } else if (Direction.WEST.getValue()) {
-            int col = (int) ((playerLeftArmX - entity.playerSpeed) / gamePanel.tileSize);
-            int rowTop = (int) (playerLeftArmYTop + 1) / gamePanel.tileSize;
-            int rowBottom = (int) (playerLeftArmYBottom - 1) / gamePanel.tileSize;
-            extracted(entity, rowTop, rowBottom, col, col);
-        } else if (Direction.EAST.getValue()) {
-            int col = (int) ((playerRightArmX + entity.playerSpeed) / gamePanel.tileSize);
-            int rowTop = (int) (playerRightArmYTop + 1) / gamePanel.tileSize;
-            int rowBottom = (int) (playerRightArmYBottom - 1) / gamePanel.tileSize;
-            extracted(entity, rowTop, rowBottom, col, col);
+        if (KeyEnum.NORTH.getValue()) {
+            int row = (int) ((playerHeadY - entity.playerSpeed) / GamePanel.tileSize);
+            int colLeft = (int) ((playerHeadXLeft + 1) / GamePanel.tileSize);
+            int colRight = (int) (playerHeadXRight - 1) / GamePanel.tileSize;
+            collisionSetter(entity, row, row, colLeft, colRight);
+        } else if (KeyEnum.SOUTH.getValue()) {
+            int row = (int) ((playerFeedY + entity.playerSpeed) / GamePanel.tileSize);
+            int colLeft = (int) (playerFeedXLeft + 1) / GamePanel.tileSize;
+            int colRight = (int) (playerFeedXRight - 1) / GamePanel.tileSize;
+            collisionSetter(entity, row, row, colLeft, colRight);
+        } else if (KeyEnum.WEST.getValue()) {
+            int col = (int) ((playerLeftArmX - entity.playerSpeed) / GamePanel.tileSize);
+            int rowTop = (int) (playerLeftArmYTop + 1) / GamePanel.tileSize;
+            int rowBottom = (int) (playerLeftArmYBottom - 1) / GamePanel.tileSize;
+            collisionSetter(entity, rowTop, rowBottom, col, col);
+        } else if (KeyEnum.EAST.getValue()) {
+            int col = (int) ((playerRightArmX + entity.playerSpeed) / GamePanel.tileSize);
+            int rowTop = (int) (playerRightArmYTop + 1) / GamePanel.tileSize;
+            int rowBottom = (int) (playerRightArmYBottom - 1) / GamePanel.tileSize;
+            collisionSetter(entity, rowTop, rowBottom, col, col);
         }
 
     }
 
-    private void extracted(Entity entity, int rowTop, int rowBottom, int colLeft, int colRight) {
-        final int tileNum1;
-        final int tileNum2;
-        tileNum1 = gamePanel.tileManager.mapTileNum[colLeft][rowTop];
-        tileNum2 = gamePanel.tileManager.mapTileNum[colRight][rowBottom];
+    private void collisionSetter(Entity entity, int rowTop, int rowBottom, int colLeft, int colRight) {
+        final int tileNum1 = gamePanel.tileManager.mapTileNum[colLeft][rowTop];
+        final int tileNum2 = gamePanel.tileManager.mapTileNum[colRight][rowBottom];
         if (gamePanel.tileManager.tile[tileNum1].collision || gamePanel.tileManager.tile[tileNum2].collision) {
             entity.collisionOn = true;
         } else if (gamePanel.tileManager.tile[tileNum1].slowCollision || gamePanel.tileManager.tile[tileNum2].slowCollision) {
             entity.collisionSlow = true;
         } else if (gamePanel.tileManager.tile[tileNum1].exitCollision || gamePanel.tileManager.tile[tileNum2].exitCollision) {
             entity.collisionExit = true;
+            gamePanel.end = true;
+            gamePanel.restart();
         }
     }
 
@@ -84,33 +85,33 @@ public class CollisionChecker {
         for (Item item : gamePanel.items) {
             if (item != null) {
 
-                Rectangle rectanglePlayer = new Rectangle(entity.rectanglePlayer);
+                final Rectangle rectanglePlayer = new Rectangle(entity.rectanglePlayer);
                 rectanglePlayer.x = (int) (entity.playerPositionX + entity.rectanglePlayer.width);
                 rectanglePlayer.y = (int) (entity.playerPositionY + entity.rectanglePlayer.height);
 
-                Rectangle rectangleItem = new Rectangle(item.rectangleItem);
+                final Rectangle rectangleItem = new Rectangle(item.rectangleItem);
                 rectangleItem.x = item.rectangleItem.x + item.rectangleItem.height;
                 rectangleItem.y = item.rectangleItem.y + item.rectangleItem.width;
 
-                if (Direction.NORTH.getValue()) {
+                if (KeyEnum.NORTH.getValue()) {
                     rectanglePlayer.y -= entity.playerSpeed;
                     if (rectanglePlayer.intersects(rectangleItem)) {
                         entity.collisionKey = true;
                         return index;
                     }
-                } else if (Direction.SOUTH.getValue()) {
+                } else if (KeyEnum.SOUTH.getValue()) {
                     rectanglePlayer.y += entity.playerSpeed;
                     if (rectanglePlayer.intersects(rectangleItem)) {
                         entity.collisionKey = true;
                         return index;
                     }
-                } else if (Direction.WEST.getValue()) {
+                } else if (KeyEnum.WEST.getValue()) {
                     rectanglePlayer.x -= entity.playerSpeed;
                     if (rectanglePlayer.intersects(rectangleItem)) {
                         entity.collisionKey = true;
                         return index;
                     }
-                } else if (Direction.EAST.getValue()) {
+                } else if (KeyEnum.EAST.getValue()) {
                     rectanglePlayer.x += entity.playerSpeed;
                     if (rectanglePlayer.intersects(rectangleItem)) {
                         entity.collisionKey = true;
@@ -137,25 +138,25 @@ public class CollisionChecker {
                 rectangleDoor.x = door.rectangleItem.x + door.rectangleItem.height;
                 rectangleDoor.y = door.rectangleItem.y + door.rectangleItem.width;
 
-                if (Direction.NORTH.getValue()) {
+                if (KeyEnum.NORTH.getValue()) {
                     rectanglePlayer.y -= entity.playerSpeed;
                     if (rectanglePlayer.intersects(rectangleDoor)) {
                         entity.collisionDoor = true;
                         return index;
                     }
-                } else if (Direction.SOUTH.getValue()) {
+                } else if (KeyEnum.SOUTH.getValue()) {
                     rectanglePlayer.y += entity.playerSpeed;
                     if (rectanglePlayer.intersects(rectangleDoor)) {
                         entity.collisionDoor = true;
                         return index;
                     }
-                } else if (Direction.WEST.getValue()) {
+                } else if (KeyEnum.WEST.getValue()) {
                     rectanglePlayer.x -= entity.playerSpeed;
                     if (rectanglePlayer.intersects(rectangleDoor)) {
                         entity.collisionDoor = true;
                         return index;
                     }
-                } else if (Direction.EAST.getValue()) {
+                } else if (KeyEnum.EAST.getValue()) {
                     rectanglePlayer.x += entity.playerSpeed;
                     if (rectanglePlayer.intersects(rectangleDoor)) {
                         entity.collisionDoor = true;

@@ -1,15 +1,18 @@
 package player;
 
-public enum Direction {
+public enum KeyEnum {
     NORTH(false),
     SOUTH(false),
     EAST(false),
-    WEST(false);
+    WEST(false),
+
+    ESC(false),
+    ENTER(false);
 
 
     private boolean value;
 
-    Direction(boolean value) {
+    KeyEnum(boolean value) {
         this.value = value;
     }
 

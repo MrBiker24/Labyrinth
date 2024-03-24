@@ -1,20 +1,14 @@
 package Items;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.Objects;
+import gui.GamePanel;
+import tools.ImageUtils;
 
 public class Door extends Item {
 
     public Door() {
-        super(32, 5);
+        super(GamePanel.tileSize, GamePanel.tileSize / 6);
         name = "Door";
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/door.png")));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = ImageUtils.loadImage("/items/door.png");
 
         coolision = true;
     }

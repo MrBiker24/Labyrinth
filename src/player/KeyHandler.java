@@ -13,7 +13,12 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        setDirection(e.getKeyCode(), true);
+
+        if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            KeyEnum.ESC.setValue(!KeyEnum.ESC.getValue());
+        } else {
+            setDirection(e.getKeyCode(), true);
+        }
     }
 
     @Override
@@ -24,16 +29,27 @@ public class KeyHandler implements KeyListener {
     private void setDirection(final int keyCode, boolean runOrStop) {
         switch (keyCode) {
             case KeyEvent.VK_W:
-                Direction.NORTH.setValue(runOrStop);
+                if (!KeyEnum.ESC.getValue()) {
+                    KeyEnum.NORTH.setValue(runOrStop);
+                }
                 break;
             case KeyEvent.VK_S:
-                Direction.SOUTH.setValue(runOrStop);
+                if (!KeyEnum.ESC.getValue()) {
+                    KeyEnum.SOUTH.setValue(runOrStop);
+                }
                 break;
             case KeyEvent.VK_D:
-                Direction.EAST.setValue(runOrStop);
+                if (!KeyEnum.ESC.getValue()) {
+                    KeyEnum.EAST.setValue(runOrStop);
+                }
                 break;
             case KeyEvent.VK_A:
-                Direction.WEST.setValue(runOrStop);
+                if (!KeyEnum.ESC.getValue()) {
+                    KeyEnum.WEST.setValue(runOrStop);
+                }
+                break;
+            case KeyEvent.VK_ENTER:
+                KeyEnum.ENTER.setValue(runOrStop);
                 break;
         }
     }

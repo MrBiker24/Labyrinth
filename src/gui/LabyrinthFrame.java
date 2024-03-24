@@ -1,19 +1,16 @@
-package main;
+package gui;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class Main {
-
+public class LabyrinthFrame {
     public static final String START_PANEL = "start panel";
     public static final String GAME_PANEL = "game panel";
-
     public static CardLayout cardLayout;
 
-    public static void main(String[] args) {
+    public LabyrinthFrame() {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //frame.setResizable(false);
         frame.setTitle("Labyrinth");
 
         cardLayout = new CardLayout();
@@ -38,7 +35,5 @@ public class Main {
 
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-
     }
 }

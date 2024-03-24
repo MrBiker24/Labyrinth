@@ -1,20 +1,14 @@
 package Items;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.Objects;
+import gui.GamePanel;
+import tools.ImageUtils;
 
 public class Key extends Item {
 
     public Key() {
-        super(16,16);
+        super(GamePanel.tileSize, GamePanel.tileSize);
         name = "Key";
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/key_32x32.png")));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        image = ImageUtils.loadImage("/items/key_32x32.png");
 
         coolision = true;
     }

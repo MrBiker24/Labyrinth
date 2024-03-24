@@ -1,7 +1,8 @@
-package main;
+package gui;
 
 import Items.Item;
 import Items.ItemSetter;
+import collision.CollisionChecker;
 import enviroment.EnviromentManager;
 import player.KeyHandler;
 import player.Player;
@@ -12,28 +13,30 @@ import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    static final int originalTileSize = 16;
-    public int scale = 2;
-    public int tileSize = originalTileSize * scale;
+    public static final int originalTileSize = 16;
+    public static int scale = 2;
+    public static int tileSize = originalTileSize * scale;
     public final int maxScreenCol = 40;
     public final int maxScreenRow = 25;
+    private final KeyHandler keyHandler = new KeyHandler();
+    private final UI ui;
     public int screenWidth = tileSize * maxScreenCol;
     public int screenHeight = tileSize * maxScreenRow;
-
     public Player player;
-    private Thread game;
-    public Item[] items = new Item[7];
-    public Item[] doors = new Item[50];
-
-    private final KeyHandler keyHandler = new KeyHandler();
     public ItemSetter itemSetter;
     public CollisionChecker collisionChecker;
-
     public TileManager tileManager;
-
     public EnviromentManager enviromentManager;
 
-    private int mapCounter = 1;
+    public Item[] items = new Item[7];
+    public Item[] doors = new Item[50];
+    public int mapCounter = 1;
+    public boolean end = false;
+    private Thread game;
+
+    public GamePanel() {
+        ui = new UI(this);
+    }
 
     public void startGame() {
         game = new Thread(this);
@@ -51,12 +54,16 @@ public class GamePanel extends JPanel implements Runnable {
             repaint();
 
             try {
-                Thread.sleep((1000 / (30 * scale)));
+                if (scale == 3) {
+                    Thread.sleep((1000 / (25L * scale)));
+                } else {
+                    Thread.sleep((1000 / (30L * scale)));
+                }
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
     }
 
     public void update() {
@@ -72,13 +79,13 @@ public class GamePanel extends JPanel implements Runnable {
 
         for (Item item : this.items) {
             if (item != null) {
-                item.draw(graphics2D, this, false);
+                item.draw(graphics2D, false);
             }
         }
 
         for (Item door : this.doors) {
             if (door != null) {
-                door.draw(graphics2D, this, true);
+                door.draw(graphics2D, true);
             }
         }
 
@@ -86,15 +93,28 @@ public class GamePanel extends JPanel implements Runnable {
 
         enviromentManager.draw(graphics2D);
 
+        ui.draw(graphics2D);
+
         graphics2D.dispose();
     }
 
-    public void setupGame(JPanel mainPanel, int scale) {
+    public void setupGame(int scale) {
         this.player = new Player(this, keyHandler);
         this.tileManager = new TileManager(this);
         this.collisionChecker = new CollisionChecker(this);
         this.itemSetter = new ItemSetter(this);
         this.enviromentManager = new EnviromentManager(this);
+
+        GamePanel.scale = scale;
+        player.rectanglePlayer.height = 12 * GamePanel.scale;
+        player.rectanglePlayer.width = 10 * GamePanel.scale;
+
+        tileSize = originalTileSize * scale;
+        System.out.println(tileSize);
+
+        screenWidth = (tileSize * maxScreenCol);
+        screenHeight = (tileSize * maxScreenRow);
+
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -102,14 +122,6 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(player.keyHandler);
         this.setFocusable(true);
         this.requestFocus();
-
-        this.scale = scale;
-        player.rectanglePlayer.height = 12 * this.scale;
-        player.rectanglePlayer.width = 10 * this.scale;
-
-        tileSize = originalTileSize * scale;
-        screenWidth = tileSize * maxScreenCol;
-        screenHeight = tileSize * maxScreenRow;
 
         itemSetter.populateItems();
         itemSetter.populateDoors();

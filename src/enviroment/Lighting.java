@@ -1,6 +1,6 @@
 package enviroment;
 
-import main.GamePanel;
+import gui.GamePanel;
 
 import java.awt.*;
 import java.awt.geom.Area;
@@ -20,14 +20,14 @@ public class Lighting {
     }
 
     private void paintLightning() {
-        int circleSize = 100 * gamePanel.scale;
+        int circleSize = 100 * GamePanel.scale;
         darknessFilter = new BufferedImage(gamePanel.screenWidth, gamePanel.screenHeight, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2 = (Graphics2D) darknessFilter.getGraphics();
 
         Area screenArea = new Area(new Rectangle2D.Double(0, 0, gamePanel.screenWidth, gamePanel.screenHeight));
 
-        double centerX = (gamePanel.player.playerPositionX + (double) (gamePanel.tileSize) / 2);
-        double centerY = (gamePanel.player.playerPositionY + (double) (gamePanel.tileSize) / 2);
+        double centerX = (gamePanel.player.playerPositionX + (double) (GamePanel.tileSize) / 2);
+        double centerY = (gamePanel.player.playerPositionY + (double) (GamePanel.tileSize) / 2);
 
         double x = centerX - ((double) circleSize / 2);
         double y = centerY - ((double) circleSize / 2);
@@ -67,10 +67,8 @@ public class Lighting {
         fraction[10] = 0.95f;
         fraction[11] = 1f;
 
-        // Create a gradation paint settings
         RadialGradientPaint gPaint = new RadialGradientPaint((float) centerX, (float) centerY, ((float) circleSize / 2), fraction, color);
 
-        // Set the gradient data on g2
         g2.setPaint(gPaint);
 
         g2.fill(lightArea);
@@ -88,6 +86,6 @@ public class Lighting {
 
     public void draw(Graphics2D g2) {
         paintLightning();
-        //g2.drawImage(darknessFilter, 0, 0, null);
+        g2.drawImage(darknessFilter, 0, 0, null);
     }
 }

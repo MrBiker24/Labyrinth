@@ -1,6 +1,6 @@
 package Items;
 
-import main.GamePanel;
+import gui.GamePanel;
 import tile.TileNum;
 
 import java.awt.*;
@@ -40,17 +40,17 @@ public class ItemSetter {
 
             int tileNumber = gamePanel.tileManager.mapTileNum[col][row];
 
-            if(tileNumber == TileNum.DOOR.getValue()){
+            if (tileNumber == TileNum.DOOR.getValue()) {
                 gamePanel.doors[index] = new Door();
-                gamePanel.doors[index].rectangleItem.x = col * gamePanel.tileSize;
-                gamePanel.doors[index].rectangleItem.y = row * gamePanel.tileSize;
+                gamePanel.doors[index].rectangleItem.x = col * GamePanel.tileSize;
+                gamePanel.doors[index].rectangleItem.y = row * GamePanel.tileSize;
                 index++;
             }
 
-            if(tileNumber == TileNum.DOORROTATED.getValue()){
+            if (tileNumber == TileNum.DOORROTATED.getValue()) {
                 gamePanel.doors[index] = new DoorRotated();
-                gamePanel.doors[index].rectangleItem.x = col * gamePanel.tileSize;
-                gamePanel.doors[index].rectangleItem.y = row * gamePanel.tileSize;
+                gamePanel.doors[index].rectangleItem.x = col * GamePanel.tileSize;
+                gamePanel.doors[index].rectangleItem.y = row * GamePanel.tileSize;
                 index++;
             }
 
@@ -73,11 +73,10 @@ public class ItemSetter {
     }
 
     private boolean isTrue(Point position) {
-        int y = (position.y + 10) / gamePanel.tileSize;
-        int x = (position.x + 10) / gamePanel.tileSize;
-        int tester = gamePanel.tileManager.mapTileNum[x][y];
-        boolean test = tester != TileNum.WAY.getValue();
-        return test;
+        int y = (position.y) / GamePanel.tileSize;
+        int x = (position.x) / GamePanel.tileSize;
+        int tileNumber = gamePanel.tileManager.mapTileNum[x][y];
+        return tileNumber != TileNum.WAY.getValue();
     }
 
 }

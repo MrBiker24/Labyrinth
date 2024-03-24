@@ -1,6 +1,6 @@
 package enviroment;
 
-import main.GamePanel;
+import gui.GamePanel;
 
 import java.awt.*;
 

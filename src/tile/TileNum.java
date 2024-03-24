@@ -12,7 +12,7 @@ public enum TileNum {
     EXIT(6);
 
 
-    private int value;
+    private final int value;
 
     TileNum(int value) {
         this.value = value;

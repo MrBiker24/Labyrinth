@@ -1,13 +1,11 @@
 package player;
 
 import Items.*;
-import main.GamePanel;
+import gui.GamePanel;
+import tools.ImageUtils;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.Objects;
 
 public class Player extends Entity {
     public KeyHandler keyHandler;
@@ -32,15 +30,9 @@ public class Player extends Entity {
     }
 
     public void getPlayerImage() {
-
-        try {
-            stand = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/explorer.png")));
-            run1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/explorer1.png")));
-            run2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/explorer2.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        stand = ImageUtils.loadImage("/player/explorer.png");
+        run1 = ImageUtils.loadImage("/player/explorer1.png");
+        run2 = ImageUtils.loadImage("/player/explorer2.png");
     }
 
     public void update() {
@@ -66,14 +58,16 @@ public class Player extends Entity {
         }
 
         if (!collisionOn && !collisionDoor) {
-            if (Direction.NORTH.getValue()) {
+            if (KeyEnum.NORTH.getValue()) {
                 playerPositionY -= playerSpeed;
-            } else if (Direction.SOUTH.getValue()) {
+            } else if (KeyEnum.SOUTH.getValue()) {
                 playerPositionY += playerSpeed;
-            } else if (Direction.WEST.getValue()) {
+            } else if (KeyEnum.WEST.getValue()) {
                 playerPositionX -= playerSpeed;
-            } else if (Direction.EAST.getValue()) {
+            } else if (KeyEnum.EAST.getValue()) {
                 playerPositionX += playerSpeed;
+            } else if (KeyEnum.ENTER.getValue()) {
+                gamePanel.end = false;
             }
         }
 
@@ -109,25 +103,25 @@ public class Player extends Entity {
 
         BufferedImage image;
 
-        if (Direction.NORTH.getValue()) {
+        if (KeyEnum.NORTH.getValue()) {
             if (runCount == 1) {
                 runCount = 2;
             } else {
                 runCount = 1;
             }
-        } else if (Direction.SOUTH.getValue()) {
+        } else if (KeyEnum.SOUTH.getValue()) {
             if (runCount == 1) {
                 runCount = 2;
             } else {
                 runCount = 1;
             }
-        } else if (Direction.WEST.getValue()) {
+        } else if (KeyEnum.WEST.getValue()) {
             if (runCount == 1) {
                 runCount = 2;
             } else {
                 runCount = 1;
             }
-        } else if (Direction.EAST.getValue()) {
+        } else if (KeyEnum.EAST.getValue()) {
             if (runCount == 1) {
                 runCount = 2;
             } else {
