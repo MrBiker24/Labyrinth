@@ -106,17 +106,9 @@ public class GamePanel extends JPanel implements Runnable {
         this.enviromentManager = new EnviromentManager(this);
 
         GamePanel.scale = scale;
-        player.rectanglePlayer.height = 12 * GamePanel.scale;
-        player.rectanglePlayer.width = 10 * GamePanel.scale;
+        setPlayerandGamneSize();
 
-        tileSize = originalTileSize * scale;
-        System.out.println(tileSize);
-
-        screenWidth = (tileSize * maxScreenCol);
-        screenHeight = (tileSize * maxScreenRow);
-
-
-        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
+        this.setPreferredSize(new Dimension((int)screenWidth, (int)screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(player.keyHandler);
@@ -126,6 +118,31 @@ public class GamePanel extends JPanel implements Runnable {
         itemSetter.populateItems();
         itemSetter.populateDoors();
         enviromentManager.setup();
+    }
+
+    private void setPlayerandGamneSize() {
+        if (scale == 999) {
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            screenWidth = screenSize.width;
+            screenHeight = screenSize.height;
+
+            tileSize = ((screenWidth / maxScreenCol) + (screenHeight / maxScreenRow)) / 2;
+
+        scale = tileSize / originalTileSize;
+
+            player.rectanglePlayer.height = (int)(12 * GamePanel.scale);
+            player.rectanglePlayer.width = (int)(10 * GamePanel.scale);
+
+
+        } else {
+            player.rectanglePlayer.height = (int)(12 * GamePanel.scale);
+            player.rectanglePlayer.width = (int)(10 * GamePanel.scale);
+
+            tileSize = originalTileSize * scale;
+
+            screenWidth = (tileSize * maxScreenCol);
+            screenHeight = (tileSize * maxScreenRow);
+        }
     }
 
     public void restart() {

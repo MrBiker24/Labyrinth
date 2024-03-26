@@ -45,6 +45,12 @@ public class StartPanel extends JPanel {
         grafic3.addActionListener(e -> this.scale = 3);
         this.add(grafic3);
 
+        /*JButton grafic4 = new JButton("Vollbild");
+        grafic4.setBounds(350, 200, 100, 50);
+        //grafic3.setIcon(new ImageIcon(Objects.requireNonNull(ImageUtils.loadImage("/btn_100x50.png"))));
+        grafic4.addActionListener(e -> this.scale = 999);
+        this.add(grafic4);*/
+
         JButton start = new JButton("Start");
         start.setBounds(200, 350, 100, 50);
         //start.setIcon(new ImageIcon(Objects.requireNonNull(ImageUtils.loadImage("/btn_100x50.png"))));
@@ -68,7 +74,13 @@ public class StartPanel extends JPanel {
 
         gamePanel.setupGame(scale);
 
-        frame.setSize((gamePanel.screenWidth + (GamePanel.tileSize / 2)), (gamePanel.screenHeight + GamePanel.tileSize));
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+        if(gamePanel.screenWidth == screenSize.width && gamePanel.screenHeight == screenSize.height){
+            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        }else {
+            frame.setSize((int) (gamePanel.screenWidth + (GamePanel.tileSize / 2)), (int) (gamePanel.screenHeight + GamePanel.tileSize));
+        }
         frame.setResizable(false);
 
         gamePanel.startGame();
