@@ -1,17 +1,21 @@
 package generator;
 
-import player.KeyHandler;
+import tile.Tile;
+import tile.TileNum;
+import tools.FolderContent;
 import tools.ImageUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Random;
 
-public class LabyrinthGenerator extends JFrame {
+public class LabyrinthGenerator extends JFrame implements Runnable {
     private static final int tileSize = 32;
     private static final int maxScreenCol = 40;
     private static final int maxScreenRow = 25;
@@ -19,21 +23,28 @@ public class LabyrinthGenerator extends JFrame {
     private static final int screenHeight = (tileSize * maxScreenRow) + 80;
 
     private int[][] maze;
-
-    private final KeyHandlerGenerator keyHandlerGenerator;
+    public Tile[] tile;
 
     public JLabel tileNumber;
 
+    private int doorCount, endCount = 1;
+
     public LabyrinthGenerator() {
-        keyHandlerGenerator = new KeyHandlerGenerator(this);
         setTitle("Labyrinth Generator");
         setSize(screenWidth, screenHeight);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        getTileImage();
+
+        KeyHandlerGenerator keyHandlerGenerator = new KeyHandlerGenerator(this);
+        this.addKeyListener(keyHandlerGenerator);
+        this.setFocusable(true);
+        this.requestFocus();
 
         JPanel buttonPanel = new JPanel();
-        JButton generateButton = new JButton("Generate Labyrinth");
+        JButton generateButton = new JButton("Generate New Labyrinth");
         generateButton.addActionListener(e -> {
-            generateMaze();
+            //generateMaze();
+            setInitialMaze();
             repaint();
         });
         buttonPanel.add(generateButton);
@@ -46,6 +57,7 @@ public class LabyrinthGenerator extends JFrame {
         buttonPanel.add(tileNumber);
 
         JPanel mazePanel = new JPanel() {
+
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -69,6 +81,15 @@ public class LabyrinthGenerator extends JFrame {
             }
         });
 
+        //generateMaze();
+        setInitialMaze();
+        repaint();
+
+        mazePanel.setDoubleBuffered(true);
+        mazePanel.addKeyListener(keyHandlerGenerator);
+        mazePanel.setFocusable(true);
+        mazePanel.requestFocus();
+
         add(buttonPanel, BorderLayout.NORTH);
         add(mazePanel, BorderLayout.CENTER);
     }
@@ -76,36 +97,33 @@ public class LabyrinthGenerator extends JFrame {
     private void generateMaze() {
         maze = new int[maxScreenRow][maxScreenCol];
 
-        // Fill maze with random values based on specified rules
         for (int i = 0; i < maxScreenRow; i++) {
             for (int j = 0; j < maxScreenCol; j++) {
                 if (i == 0 || i == maxScreenRow - 1 || j == 0 || j == maxScreenCol - 1) {
-                    maze[i][j] = 5; // Boundary walls
+                    maze[i][j] = 5;
                 } else if (i % 2 == 0 && j % 2 == 0) {
-                    maze[i][j] = 5; // Internal walls
+                    maze[i][j] = 5;
                 } else {
                     double randomValue = Math.random();
-                    if (randomValue < 0.5) { // Increase the wall percentage to 50%
-                        maze[i][j] = 5; // Wall
+                    if (randomValue < 0.5) {
+                        maze[i][j] = 5;
                     } else if (randomValue < 0.7) {
-                        maze[i][j] = 1; // Path
+                        maze[i][j] = 1;
                     } else if (randomValue < 0.85) {
-                        maze[i][j] = 2; // Water
+                        maze[i][j] = 2;
                     } else {
-                        maze[i][j] = 0; // Grass
+                        maze[i][j] = 0;
                     }
                 }
             }
         }
 
-        // Start room
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 maze[i + 1][j + 1] = 1;
             }
         }
 
-        // Connect walls
         for (int i = 1; i < maxScreenRow - 1; i++) {
             for (int j = 1; j < maxScreenCol - 1; j++) {
                 if (maze[i][j] == 5) {
@@ -124,7 +142,6 @@ public class LabyrinthGenerator extends JFrame {
             }
         }
 
-        // Add doors
         int doorCount = 0;
         while (doorCount < 10) {
             int row = (int) (Math.random() * (maxScreenRow - 2)) + 1;
@@ -136,90 +153,104 @@ public class LabyrinthGenerator extends JFrame {
             }
         }
 
-        // Add exit
         int exitRow = (int) (Math.random() * (maxScreenRow - 2)) + 1;
         int exitCol = (int) (Math.random() * (maxScreenCol - 2)) + 1;
         maze[exitRow][exitCol] = 6;
     }
 
+    private void getTileImage() {
+        tile = new Tile[7];
+
+        tile[TileNum.GRAS.getValue()] = new Tile();
+        tile[TileNum.GRAS.getValue()].image = ImageUtils.loadImage("/tiles/gras.png");
+
+        tile[TileNum.WAY.getValue()] = new Tile();
+        tile[TileNum.WAY.getValue()].image = ImageUtils.loadImage("/tiles/way.png");
+
+        tile[TileNum.WATER.getValue()] = new Tile();
+        tile[TileNum.WATER.getValue()].image = ImageUtils.loadImage("/tiles/water.png");
+
+        tile[TileNum.DOOR.getValue()] = new Tile();
+        tile[TileNum.DOOR.getValue()].image = ImageUtils.loadImage("/tiles/way_door.png");
+
+        tile[TileNum.DOORROTATED.getValue()] = new Tile();
+        tile[TileNum.DOORROTATED.getValue()].image = ImageUtils.loadImage("/tiles/way_doorRotated.png");
+
+        tile[TileNum.WALL.getValue()] = new Tile();
+        tile[TileNum.WALL.getValue()].image = ImageUtils.loadImage("/tiles/wall.png");
+
+        tile[TileNum.EXIT.getValue()] = new Tile();
+        tile[6].image = ImageUtils.loadImage("/tiles/exit.png");
+
+    }
+
     private void drawMaze(Graphics g) {
         for (int i = 0; i < maxScreenRow; i++) {
             for (int j = 0; j < maxScreenCol; j++) {
-                Color color;
                 BufferedImage image = null;
                 switch (maze[i][j]) {
-                    case 0 -> {
-                        color = Color.GREEN; // Grass
-                        image = ImageUtils.loadImage("/tiles/gras.png");
-                    }
-                    case 1 -> {
-                        color = Color.WHITE; // Way
-                        image = ImageUtils.loadImage("/tiles/way.png");
-                    }
-                    case 2 -> {
-                        color = Color.BLUE; // Water
-                        image = ImageUtils.loadImage("/tiles/water.png");
-                    }
-                    case 3 -> {
-                        color = Color.RED; // Vertical or Horizontal door
-                        image = ImageUtils.loadImage("/items/door.png");
-                    }
-                    case 4 -> {
-                        color = Color.RED; // Vertical or Horizontal door
-                        image = ImageUtils.loadImage("/items/doorRotated.png");
-                    }
-                    case 5 -> {
-                        color = Color.GRAY; // Wall
-                        image = ImageUtils.loadImage("/tiles/wall.png");
-                    }
-                    case 6 -> {
-                        color = Color.YELLOW; // Exit
-                        image = ImageUtils.loadImage("/tiles/exit.png");
-                    }
+                    case 0 -> image = tile[0].image;
+                    case 1 -> image = tile[1].image;
+                    case 2 -> image = tile[2].image;
+                    case 3 -> image = tile[3].image;
+                    case 4 -> image = tile[4].image;
+                    case 5 -> image = tile[5].image;
+                    case 6 -> image = tile[6].image;
                 }
-                //g.setColor(color);
                 g.drawImage(image, j * tileSize, i * tileSize, tileSize, tileSize, null);
-
-                //g.fillRect(j * tileSize, i * tileSize, tileSize, tileSize);
             }
         }
     }
 
     private void toggleCell(int row, int col) {
-        if (maze != null && row >= 0 && row < maxScreenRow && col >= 0 && col < maxScreenCol) {
-            if (KeyEnumGenerator.ZERO.getValue()){
+        if (maze[row][col] == 6) {
+            endCount = 0;
+        } else if (maze[row][col] == 3 || maze[row][col] == 4) {
+            doorCount -= 1;
+        }
+        if (!notEditable(row, col) && maze != null && row < maxScreenRow && col < maxScreenCol) {
+            if (KeyEnumGenerator.ZERO.getValue()) {
                 maze[row][col] = 0;
-            }else if (KeyEnumGenerator.ONE.getValue()){
+            } else if (KeyEnumGenerator.ONE.getValue()) {
                 maze[row][col] = 1;
-            }else if (KeyEnumGenerator.TWO.getValue()){
+            } else if (KeyEnumGenerator.TWO.getValue()) {
                 maze[row][col] = 2;
-            }else if (KeyEnumGenerator.THREE.getValue()){
-                maze[row][col] = 3;
-            }else if (KeyEnumGenerator.FOUR.getValue()){
-                maze[row][col] = 4;
-            }else if (KeyEnumGenerator.FIVE.getValue()){
+            } else if (KeyEnumGenerator.THREE.getValue()) {
+                if (doorCount < 10) {
+                    maze[row][col] = 3;
+                    doorCount += 1;
+                }
+            } else if (KeyEnumGenerator.FOUR.getValue()) {
+                if (doorCount < 10) {
+                    maze[row][col] = 4;
+                    doorCount += 1;
+                }
+            } else if (KeyEnumGenerator.FIVE.getValue()) {
                 maze[row][col] = 5;
-            }else if (KeyEnumGenerator.SIX.getValue()){
-                maze[row][col] = 6;
+            } else if (KeyEnumGenerator.SIX.getValue()) {
+                if (endCount < 1) {
+                    maze[row][col] = 6;
+                    endCount = 1;
+                }
             }
-
-
         }
     }
 
     private void saveMazeToFile() {
-        JFileChooser fileChooser = new JFileChooser();
+        int mapNumber = FolderContent.countFolderContents();
+        String defaultFileName = "map" + mapNumber;
+
+        JFileChooser fileChooser = new JFileChooser(FolderContent.defaultDirectory);
+        fileChooser.setSelectedFile(new File(defaultFileName)); // Setzen des vordefinierten Dateinamens
+
         fileChooser.setDialogTitle("Save Maze to File");
         int userSelection = fileChooser.showSaveDialog(this);
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             File fileToSave = fileChooser.getSelectedFile();
-            try (PrintWriter writer = new PrintWriter(fileToSave)) {
+            try (PrintWriter writer = new PrintWriter(fileToSave + ".txt")) {
                 for (int i = 0; i < maxScreenRow; i++) {
                     for (int j = 0; j < maxScreenCol; j++) {
                         writer.print(maze[i][j]);
-                        if (j < maxScreenCol - 1) {
-                            writer.print(",");
-                        }
                     }
                     writer.println();
                 }
@@ -231,7 +262,103 @@ public class LabyrinthGenerator extends JFrame {
         }
     }
 
+
+    private void setInitialMaze() {
+        maze = new int[maxScreenRow][maxScreenCol];
+
+        for (int i = 0; i < maxScreenRow; i++) {
+            for (int j = 0; j < maxScreenCol; j++) {
+                maze[i][j] = 5;
+            }
+        }
+
+        int startRow = 1;
+        int startCol = 1;
+        maze[startRow][startCol] = 1; // Weg
+
+        buildMaze(startRow, startCol);
+        maze[0][0] = 1;
+        maze[0][1] = 1;
+        maze[0][2] = 1;
+        maze[1][0] = 1;
+        maze[1][1] = 1;
+        maze[1][2] = 1;
+        maze[2][0] = 1;
+        maze[2][1] = 1;
+        maze[2][2] = 1;
+
+        Random random = new Random();
+        maze[random.nextInt(25)][random.nextInt(40)] = 6;
+    }
+
+    private void buildMaze(int row, int col) {
+        int[][] directions = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+        shuffleArray(directions);
+
+        for (int[] dir : directions) {
+            int newRow = row + dir[0] * 2;
+            int newCol = col + dir[1] * 2;
+
+            if (newRow > 0 && newRow < maxScreenRow - 1 && newCol > 0 && newCol < maxScreenCol - 1 && maze[newRow][newCol] == 5) {
+                maze[row + dir[0]][col + dir[1]] = 1;
+                maze[newRow][newCol] = 1;
+
+                buildMaze(newRow, newCol);
+            }
+        }
+    }
+
+    private void shuffleArray(int[][] array) {
+        Random rnd = new Random();
+        for (int i = array.length - 1; i > 0; i--) {
+            int index = rnd.nextInt(i + 1);
+            int[] temp = array[index];
+            array[index] = array[i];
+            array[i] = temp;
+        }
+    }
+
+    private boolean notEditable(int i, int j) {
+        if (i == 0 && j == 0) {
+            return true;
+        } else if (i == 0 && j == 1) {
+            return true;
+        } else if (i == 0 && j == 2) {
+            return true;
+        } else if (i == 1 && j == 0) {
+            return true;
+        } else if (i == 1 && j == 1) {
+            return true;
+        } else if (i == 1 && j == 2) {
+            return true;
+        } else if (i == 2 && j == 0) {
+            return true;
+        } else if (i == 2 && j == 1) {
+            return true;
+        } else if (i == 2 && j == 2) {
+            return true;
+        }
+        return false;
+    }
+
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new LabyrinthGenerator().setVisible(true));
     }
+
+    @Override
+    public void run() {
+        while (true) {
+
+            repaint();
+
+            try {
+                Thread.sleep((1000 / (120)));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 }

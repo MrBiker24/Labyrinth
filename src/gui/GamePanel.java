@@ -7,6 +7,7 @@ import enviroment.EnviromentManager;
 import player.KeyHandler;
 import player.Player;
 import tile.TileManager;
+import tools.FolderContent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,6 +32,8 @@ public class GamePanel extends JPanel implements Runnable {
     public Item[] items = new Item[7];
     public Item[] doors = new Item[50];
     public int mapCounter = 1;
+    public int maxMapCounter = FolderContent.countFolderContents();
+
     public boolean end = false;
     private Thread game;
 
@@ -149,8 +152,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.player.setDefaultValue();
 
 
-
-        if (mapCounter < 3) {
+        if (mapCounter < maxMapCounter) {
             this.tileManager.loadMap(tileManager.loadMapByNumber(mapCounter));
 
             itemSetter.populateItems();

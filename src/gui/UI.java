@@ -24,11 +24,11 @@ public class UI {
             drawPauseScreen();
         }
 
-        if (gamePanel.end && gamePanel.mapCounter < 4) {
+        if (gamePanel.end && gamePanel.mapCounter < gamePanel.maxMapCounter + 1) {
             drawLevelScreen();
         }
 
-        if (gamePanel.end && gamePanel.mapCounter > 3) {
+        if (gamePanel.end && gamePanel.mapCounter > gamePanel.maxMapCounter) {
             drawEndScreen();
         }
 

@@ -13,7 +13,7 @@ public class KeyHandlerGenerator implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        setDirection(e.getKeyCode());
     }
 
     @Override

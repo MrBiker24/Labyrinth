@@ -1,5 +1,6 @@
 package gui;
 
+import generator.LabyrinthGenerator;
 import tools.ImageUtils;
 import tools.Messages;
 import tools.RoundedBorder;
@@ -82,8 +83,18 @@ public class StartPanel extends JPanel {
         grafic4.addActionListener(e -> this.scale = 999);
         this.add(grafic4);*/
 
+        JButton generator = new JButton(Messages.getString("Generator"));
+        generator.setBounds(50, 350, 150, 50);
+        generator.setFont(new Font("Arial", Font.BOLD, 15));
+        generator.setOpaque(false);
+        generator.setBackground(new Color(0, 100, 0, 64));
+        generator.setForeground(Color.WHITE);
+        generator.setBorder(new RoundedBorder(10));
+        generator.addActionListener(e -> SwingUtilities.invokeLater(() -> new LabyrinthGenerator().setVisible(true)));
+        this.add(generator);
+
         JButton start = new JButton(Messages.getString("Start"));
-        start.setBounds(200, 350, 100, 50);
+        start.setBounds(350, 350, 100, 50);
         start.setFont(new Font("Arial", Font.BOLD, 15));
         start.setOpaque(false);
         start.setBackground(new Color(0, 100, 0, 64));
