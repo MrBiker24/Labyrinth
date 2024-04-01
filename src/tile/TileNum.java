@@ -5,9 +5,7 @@ public enum TileNum {
     WAY(1),
     WATER(2),
     DOOR(3),
-    DOOROPEN(7),
     DOORROTATED(4),
-    DOORROTATEDOPEN(8),
     WALL(5),
     EXIT(6);
 

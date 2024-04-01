@@ -34,15 +34,15 @@ public class TileManager {
             case 0 -> "/maps/map.txt";
             case 1 -> "/maps/map1.txt";
             case 2 -> "/maps/map2.txt";
-            case 3 -> "/maps/map3.txt";
-            case 4 -> "/maps/map4.txt";
+            case 3 -> "/maps/map_test.txt";
+            case 4 -> "/maps/map3.txt";
             default -> "/maps/map.txt";
         };
     }*/
 
     public String loadMapByNumber(int mapCount) {
         return switch (mapCount) {
-            case 0 -> "/maps/map.txt";
+            case 0 -> "/maps/map3.txt";
             case 1 -> "/maps/map1.txt";
             case 2 -> "/maps/map2.txt";
             default -> "/maps/map.txt";

@@ -1,5 +1,7 @@
 package gui;
 
+import tools.Messages;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,7 +13,8 @@ public class LabyrinthFrame {
     public LabyrinthFrame() {
         JFrame frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Labyrinth");
+        frame.setTitle(Messages.getString("Labyrinth"));
+        frame.setResizable(false);
 
         cardLayout = new CardLayout();
 

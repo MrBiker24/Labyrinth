@@ -2,6 +2,7 @@ package gui;
 
 
 import player.KeyEnum;
+import tools.Messages;
 
 import java.awt.*;
 
@@ -23,11 +24,11 @@ public class UI {
             drawPauseScreen();
         }
 
-        if (gamePanel.end) {
+        if (gamePanel.end && gamePanel.mapCounter < 4) {
             drawLevelScreen();
         }
 
-        if (gamePanel.end && gamePanel.mapCounter > 2) {
+        if (gamePanel.end && gamePanel.mapCounter > 3) {
             drawEndScreen();
         }
 
@@ -35,9 +36,9 @@ public class UI {
 
     private void drawPauseScreen() {
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 80F));
-        final String text = "Pause";
-        final String level = "Level " + gamePanel.mapCounter;
-        final String keys = "Schlüsssel: " + gamePanel.player.hasKey;
+        final String text = Messages.getString("Pause");
+        final String level = Messages.getString("Level") + gamePanel.mapCounter;
+        final String keys = Messages.getString("Schluesssel") + gamePanel.player.hasKey;
 
         final int x = gamePanel.screenWidth / 2 - 200;
         final int y = gamePanel.screenHeight / 2;
@@ -49,19 +50,19 @@ public class UI {
 
     private void drawLevelScreen() {
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 80F));
-        final String text = "Level " + (gamePanel.mapCounter);
-        final String next = "Press ENTER to continue";
+        final String text = Messages.getString("Level") + (gamePanel.mapCounter);
+        final String next = Messages.getString("EnterWeiter");
 
         final int x = gamePanel.screenWidth / 2 - 200;
         final int y = gamePanel.screenHeight / 2;
 
         graphics2D.drawString(text, x, y);
-        graphics2D.drawString(next, x - 200, y + 100);
+        graphics2D.drawString(next, 30, y + 100);
     }
 
     private void drawEndScreen() {
         graphics2D.setFont(graphics2D.getFont().deriveFont(Font.PLAIN, 80F));
-        final String text = "Ende";
+        final String text = Messages.getString("Ende");
 
         final int x = gamePanel.screenWidth / 2 - 200;
         final int y = gamePanel.screenHeight / 2;

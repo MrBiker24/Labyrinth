@@ -57,7 +57,10 @@ public class Player extends Entity {
             playerSpeed = 2.0;
         }
 
-        if (!collisionOn && !collisionDoor) {
+        if (KeyEnum.ENTER.getValue()) {
+            gamePanel.end = false;
+        }
+        if (!collisionOn && !collisionDoor && !gamePanel.end) {
             if (KeyEnum.NORTH.getValue()) {
                 playerPositionY -= playerSpeed;
             } else if (KeyEnum.SOUTH.getValue()) {
@@ -66,11 +69,8 @@ public class Player extends Entity {
                 playerPositionX -= playerSpeed;
             } else if (KeyEnum.EAST.getValue()) {
                 playerPositionX += playerSpeed;
-            } else if (KeyEnum.ENTER.getValue()) {
-                gamePanel.end = false;
             }
         }
-
     }
 
     public void pickUpObject(int itemIndex) {
@@ -137,8 +137,6 @@ public class Player extends Entity {
 
         }
 
-
-        //graphics2D.drawImage(image, (int) playerPositionX, (int) playerPositionY,  null);
         graphics2D.drawImage(image, (int) playerPositionX, (int) playerPositionY, rectanglePlayer.width, rectanglePlayer.height, null);
 
     }
