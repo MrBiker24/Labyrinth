@@ -108,7 +108,7 @@ public class GamePanel extends JPanel implements Runnable {
         GamePanel.scale = scale;
         setPlayerandGamneSize();
 
-        this.setPreferredSize(new Dimension((int) screenWidth, (int) screenHeight));
+        this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.addKeyListener(player.keyHandler);
@@ -130,13 +130,13 @@ public class GamePanel extends JPanel implements Runnable {
 
             scale = tileSize / originalTileSize;
 
-            player.rectanglePlayer.height = (int) (12 * GamePanel.scale);
-            player.rectanglePlayer.width = (int) (10 * GamePanel.scale);
+            player.rectanglePlayer.height = (12 * GamePanel.scale);
+            player.rectanglePlayer.width = (10 * GamePanel.scale);
 
 
         } else {
-            player.rectanglePlayer.height = (int) (12 * GamePanel.scale);
-            player.rectanglePlayer.width = (int) (10 * GamePanel.scale);
+            player.rectanglePlayer.height = (12 * GamePanel.scale);
+            player.rectanglePlayer.width = (10 * GamePanel.scale);
 
             tileSize = originalTileSize * scale;
 
