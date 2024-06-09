@@ -11,7 +11,7 @@ public class EnviromentManager {
 
     public EnviromentManager(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-        lighting = new Lighting(gamePanel);
+        lighting = new Lighting(this.gamePanel);
     }
 
     public void setup() {

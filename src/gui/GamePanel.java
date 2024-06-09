@@ -14,59 +14,46 @@ import java.awt.*;
 
 public class GamePanel extends JPanel implements Runnable {
 
-    public static final int originalTileSize = 16;
+    private static final int originalTileSize = 16;
     public static int scale = 2;
     public static int tileSize = originalTileSize * scale;
-    public final int maxScreenCol = 40;
-    public final int maxScreenRow = 25;
+    public final int maxScreenRow = 40;
+    public final int maxScreenCol = 25;
     private final KeyHandler keyHandler = new KeyHandler();
-    private final UI ui;
-    public int screenWidth = tileSize * maxScreenCol;
-    public int screenHeight = tileSize * maxScreenRow;
+    private final GameScreens gameScreens;
+    public int screenWidth = tileSize * maxScreenRow;
+    public int screenHeight = tileSize * maxScreenCol;
     public Player player;
-    public ItemSetter itemSetter;
+    private ItemSetter itemSetter;
     public CollisionChecker collisionChecker;
     public TileManager tileManager;
-    public EnviromentManager enviromentManager;
+    private EnviromentManager enviromentManager;
 
-    public Item[] items = new Item[7];
-    public Item[] doors = new Item[50];
+    public Item[] items = new Item[10];
+    public Item[] doors = new Item[10];
     public int mapCounter = 1;
     public int maxMapCounter = FolderContent.countFolderContents();
 
     public boolean end = false;
-    private Thread game;
+    public boolean closeGame = false;
 
     public GamePanel() {
-        ui = new UI(this);
+        gameScreens = new GameScreens(this);
     }
-
-    public void startGame() {
-        game = new Thread(this);
-        game.start();
-    }
-
 
     @Override
     public void run() {
+        int delay = (1000 / (15 * scale));
 
-        while (this.game != null) {
-
-            update();
-
-            repaint();
-
-            try {
-                if (scale == 3) {
-                    Thread.sleep((1000 / (25L * scale)));
-                } else {
-                    Thread.sleep((1000 / (30L * scale)));
-                }
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        if (scale == 3) {
+            delay = (1000 / (25 * scale));
         }
+
+        Timer timer = new Timer(delay, e -> {
+            update();
+            repaint();
+        });
+        timer.start();
     }
 
     public void update() {
@@ -76,7 +63,7 @@ public class GamePanel extends JPanel implements Runnable {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        Graphics2D graphics2D = (Graphics2D) graphics;
+        final Graphics2D graphics2D = (Graphics2D) graphics;
 
         tileManager.draw(graphics2D);
 
@@ -96,7 +83,7 @@ public class GamePanel extends JPanel implements Runnable {
 
         enviromentManager.draw(graphics2D);
 
-        ui.draw(graphics2D);
+        gameScreens.draw(graphics2D);
 
         graphics2D.dispose();
     }
@@ -109,7 +96,7 @@ public class GamePanel extends JPanel implements Runnable {
         this.enviromentManager = new EnviromentManager(this);
 
         GamePanel.scale = scale;
-        setPlayerandGamneSize();
+        setPlayerandGameSize();
 
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));
         this.setBackground(Color.BLACK);
@@ -123,13 +110,13 @@ public class GamePanel extends JPanel implements Runnable {
         enviromentManager.setup();
     }
 
-    private void setPlayerandGamneSize() {
+    private void setPlayerandGameSize() {
         if (scale == 999) {
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
             screenWidth = screenSize.width;
             screenHeight = screenSize.height;
 
-            tileSize = ((screenWidth / maxScreenCol) + (screenHeight / maxScreenRow)) / 2;
+            tileSize = ((screenWidth / maxScreenRow) + (screenHeight / maxScreenCol)) / 2;
 
             scale = tileSize / originalTileSize;
 
@@ -143,14 +130,13 @@ public class GamePanel extends JPanel implements Runnable {
 
             tileSize = originalTileSize * scale;
 
-            screenWidth = (tileSize * maxScreenCol);
-            screenHeight = (tileSize * maxScreenRow);
+            screenWidth = (tileSize * maxScreenRow);
+            screenHeight = (tileSize * maxScreenCol);
         }
     }
 
     public void restart() {
         this.player.setDefaultValue();
-
 
         if (mapCounter < maxMapCounter) {
             this.tileManager.loadMap(tileManager.loadMapByNumber(mapCounter));

@@ -22,13 +22,12 @@ public class FolderContent {
                         directoryCount++;
                     }
                 }
-
                 return fileCount + directoryCount;
             } else {
                 return 0;
             }
         } else {
-            return -1; // Rückgabe eines negativen Werts, um anzuzeigen, dass der angegebene Pfad ungültig ist oder kein Ordner ist
+            return -1;
         }
     }
 }

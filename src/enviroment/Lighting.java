@@ -10,11 +10,11 @@ import java.awt.image.BufferedImage;
 
 public class Lighting {
 
-    GamePanel gamePanel;
+    final private GamePanel gamePanel;
     private BufferedImage darknessFilter;
 
-    public Lighting(GamePanel gamePanel1) {
-        this.gamePanel = gamePanel1;
+    public Lighting(GamePanel gamePanel) {
+        this.gamePanel = gamePanel;
 
         paintLightning();
     }
@@ -72,10 +72,6 @@ public class Lighting {
         g2.setPaint(gPaint);
 
         g2.fill(lightArea);
-
-        //g2.fillRect(0, 0, gamePanel.screenWidth, gamePanel.screenHeight);
-
-        //g2.setColor(new Color(0, 0, 0, 0.95f));
 
         g2.fill(screenArea);
 

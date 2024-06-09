@@ -6,7 +6,8 @@ import java.awt.image.BufferedImage;
 public class Entity {
 
     public Rectangle rectanglePlayer = new Rectangle();
-    public double playerPositionX, playerPositionY, playerSpeed;
+    public double playerPositionX, playerPositionY;
+    public int playerSpeed;
 
     public BufferedImage stand, run1, run2;
 

@@ -22,7 +22,7 @@ public class ItemSetter {
         gamePanel.items[0].rectangleItem.x = 25;
         gamePanel.items[0].rectangleItem.y = 25;
 
-        for (int i = 1; i < 7; i++) {
+        for (int i = 1; i < 10; i++) {
             position = generatePoint(rand);
             gamePanel.items[i] = new Key();
             gamePanel.items[i].rectangleItem.x = position.x;
@@ -36,28 +36,28 @@ public class ItemSetter {
         int row = 0;
         int index = 0;
 
-        while (col < gamePanel.maxScreenCol && row < gamePanel.maxScreenRow) {
+        while (row < gamePanel.maxScreenRow && col < gamePanel.maxScreenCol) {
 
             int tileNumber = gamePanel.tileManager.mapTileNum[col][row];
 
             if (tileNumber == TileNum.DOOR.getValue()) {
                 gamePanel.doors[index] = new Door();
-                gamePanel.doors[index].rectangleItem.x = col * GamePanel.tileSize;
-                gamePanel.doors[index].rectangleItem.y = row * GamePanel.tileSize;
+                gamePanel.doors[index].rectangleItem.x = row * GamePanel.tileSize;
+                gamePanel.doors[index].rectangleItem.y = col * GamePanel.tileSize;
                 index++;
             }
 
             if (tileNumber == TileNum.DOORROTATED.getValue()) {
                 gamePanel.doors[index] = new DoorRotated();
-                gamePanel.doors[index].rectangleItem.x = col * GamePanel.tileSize;
-                gamePanel.doors[index].rectangleItem.y = row * GamePanel.tileSize;
+                gamePanel.doors[index].rectangleItem.x = row * GamePanel.tileSize;
+                gamePanel.doors[index].rectangleItem.y = col * GamePanel.tileSize;
                 index++;
             }
 
-            col++;
-            if (col == gamePanel.maxScreenCol) {
-                col = 0;
-                row++;
+            row++;
+            if (row == gamePanel.maxScreenRow) {
+                row = 0;
+                col++;
             }
         }
     }
@@ -75,7 +75,7 @@ public class ItemSetter {
     private boolean isTrue(Point position) {
         int y = (position.y) / GamePanel.tileSize;
         int x = (position.x) / GamePanel.tileSize;
-        int tileNumber = gamePanel.tileManager.mapTileNum[x][y];
+        int tileNumber = gamePanel.tileManager.mapTileNum[y][x];
         return tileNumber != TileNum.WAY.getValue();
     }
 

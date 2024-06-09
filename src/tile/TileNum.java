@@ -9,7 +9,6 @@ public enum TileNum {
     WALL(5),
     EXIT(6);
 
-
     private final int value;
 
     TileNum(int value) {

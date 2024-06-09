@@ -6,6 +6,7 @@ import Items.Item;
 import gui.GamePanel;
 import player.Entity;
 import player.KeyEnum;
+import tile.TileImage;
 
 import java.awt.*;
 
@@ -24,55 +25,54 @@ public class CollisionChecker {
             return;
         }
 
-        final double playerHeadXLeft = entity.playerPositionX;
-        final double playerHeadXRight = entity.playerPositionX + entity.rectanglePlayer.width;
-        final double playerHeadY = entity.playerPositionY;
-
-        final double playerFeedXLeft = entity.playerPositionX;
-        final double playerFeedXRight = entity.playerPositionX + entity.rectanglePlayer.width;
-        final double playerFeedY = entity.playerPositionY + entity.rectanglePlayer.height;
-
-        final double playerLeftArmX = entity.playerPositionX;
-        final double playerLeftArmYTop = entity.playerPositionY;
-        final double playerLeftArmYBottom = entity.playerPositionY + entity.rectanglePlayer.height;
-
-        final double playerRightArmX = entity.playerPositionX + entity.rectanglePlayer.width;
-        final double playerRightArmYTop = entity.playerPositionY;
-        final double playerRightArmYBottom = entity.playerPositionY + entity.rectanglePlayer.height;
-
-
         if (KeyEnum.NORTH.getValue()) {
-            int row = (int) ((playerHeadY - entity.playerSpeed) / GamePanel.tileSize);
-            int colLeft = (int) ((playerHeadXLeft + 1) / GamePanel.tileSize);
-            int colRight = (int) (playerHeadXRight - 1) / GamePanel.tileSize;
-            collisionSetter(entity, row, row, colLeft, colRight);
+            final double playerHeadXLeft = entity.playerPositionX;
+            final double playerHeadXRight = entity.playerPositionX + entity.rectanglePlayer.width;
+            final double playerHeadY = entity.playerPositionY;
+
+            int col = (int) ((playerHeadY - entity.playerSpeed) / GamePanel.tileSize);
+            int rowTop = (int) ((playerHeadXLeft + 1) / GamePanel.tileSize);
+            int rowBottom = (int) (playerHeadXRight - 1) / GamePanel.tileSize;
+            collisionSetter(entity, col, col, rowTop, rowBottom);
         } else if (KeyEnum.SOUTH.getValue()) {
-            int row = (int) ((playerFeedY + entity.playerSpeed) / GamePanel.tileSize);
-            int colLeft = (int) (playerFeedXLeft + 1) / GamePanel.tileSize;
-            int colRight = (int) (playerFeedXRight - 1) / GamePanel.tileSize;
-            collisionSetter(entity, row, row, colLeft, colRight);
+            final double playerFeedXLeft = entity.playerPositionX;
+            final double playerFeedXRight = entity.playerPositionX + entity.rectanglePlayer.width;
+            final double playerFeedY = entity.playerPositionY + entity.rectanglePlayer.height;
+
+            int col = (int) ((playerFeedY + entity.playerSpeed) / GamePanel.tileSize);
+            int rowTop = (int) (playerFeedXLeft + 1) / GamePanel.tileSize;
+            int rowBottom = (int) (playerFeedXRight - 1) / GamePanel.tileSize;
+            collisionSetter(entity, col, col, rowTop, rowBottom);
         } else if (KeyEnum.WEST.getValue()) {
-            int col = (int) ((playerLeftArmX - entity.playerSpeed) / GamePanel.tileSize);
-            int rowTop = (int) (playerLeftArmYTop + 1) / GamePanel.tileSize;
-            int rowBottom = (int) (playerLeftArmYBottom - 1) / GamePanel.tileSize;
-            collisionSetter(entity, rowTop, rowBottom, col, col);
+            final double playerLeftArmX = entity.playerPositionX;
+            final double playerLeftArmYTop = entity.playerPositionY;
+            final double playerLeftArmYBottom = entity.playerPositionY + entity.rectanglePlayer.height;
+
+            int row = (int) ((playerLeftArmX - entity.playerSpeed) / GamePanel.tileSize);
+            int colLeft = (int) (playerLeftArmYTop + 1) / GamePanel.tileSize;
+            int colRight = (int) (playerLeftArmYBottom - 1) / GamePanel.tileSize;
+            collisionSetter(entity, colLeft, colRight, row, row);
         } else if (KeyEnum.EAST.getValue()) {
-            int col = (int) ((playerRightArmX + entity.playerSpeed) / GamePanel.tileSize);
-            int rowTop = (int) (playerRightArmYTop + 1) / GamePanel.tileSize;
-            int rowBottom = (int) (playerRightArmYBottom - 1) / GamePanel.tileSize;
-            collisionSetter(entity, rowTop, rowBottom, col, col);
+            final double playerRightArmX = entity.playerPositionX + entity.rectanglePlayer.width;
+            final double playerRightArmYTop = entity.playerPositionY;
+            final double playerRightArmYBottom = entity.playerPositionY + entity.rectanglePlayer.height;
+
+            int row = (int) ((playerRightArmX + entity.playerSpeed) / GamePanel.tileSize);
+            int colLeft = (int) (playerRightArmYTop + 1) / GamePanel.tileSize;
+            int colRight = (int) (playerRightArmYBottom - 1) / GamePanel.tileSize;
+            collisionSetter(entity, colLeft, colRight, row, row);
         }
 
     }
 
-    private void collisionSetter(Entity entity, int rowTop, int rowBottom, int colLeft, int colRight) {
+    private void collisionSetter(Entity entity, int colLeft, int colRight, int rowTop, int rowBottom) {
         final int tileNum1 = gamePanel.tileManager.mapTileNum[colLeft][rowTop];
         final int tileNum2 = gamePanel.tileManager.mapTileNum[colRight][rowBottom];
-        if (gamePanel.tileManager.tile[tileNum1].collision || gamePanel.tileManager.tile[tileNum2].collision) {
+        if (TileImage.tile[tileNum1].collision || TileImage.tile[tileNum2].collision) {
             entity.collisionOn = true;
-        } else if (gamePanel.tileManager.tile[tileNum1].slowCollision || gamePanel.tileManager.tile[tileNum2].slowCollision) {
+        } else if (TileImage.tile[tileNum1].slowCollision || TileImage.tile[tileNum2].slowCollision) {
             entity.collisionSlow = true;
-        } else if (gamePanel.tileManager.tile[tileNum1].exitCollision || gamePanel.tileManager.tile[tileNum2].exitCollision) {
+        } else if (TileImage.tile[tileNum1].exitCollision || TileImage.tile[tileNum2].exitCollision) {
             entity.collisionExit = true;
             gamePanel.end = true;
             gamePanel.restart();

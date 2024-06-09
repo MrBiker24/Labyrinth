@@ -6,12 +6,12 @@ import tools.Messages;
 
 import java.awt.*;
 
-public class UI {
+public class GameScreens {
 
     private final GamePanel gamePanel;
     private Graphics2D graphics2D;
 
-    public UI(GamePanel gamePanel) {
+    public GameScreens(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
 
@@ -67,31 +67,9 @@ public class UI {
         final int x = gamePanel.screenWidth / 2 - 200;
         final int y = gamePanel.screenHeight / 2;
 
+        gamePanel.closeGame = true;
+
         graphics2D.drawString(text, x, y);
     }
-
-    /*public void drawDialogeScreen() {
-        int x = GamePanel.tileSize * 2;
-        int y = GamePanel.tileSize / 2;
-        int width = gamePanel.screenWidth - (GamePanel.tileSize * 4);
-        int height = GamePanel.tileSize * 5;
-
-        drawSubWindow(x, y, width, height);
-
-    }
-
-    private void drawSubWindow(int x, int y, int width, int height) {
-
-        Color color = new Color(0, 0, 0);
-        graphics2D.setColor(color);
-        graphics2D.fillRoundRect(x, y, width, height, 35, 35);
-
-        color = new Color(255, 255, 255);
-        graphics2D.setColor(color);
-        graphics2D.setStroke(new BasicStroke(5));
-        graphics2D.fillRoundRect(x, y, width, height, 35, 35);
-    }*/
-
-
 }
 

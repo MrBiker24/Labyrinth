@@ -9,9 +9,7 @@ import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
     public KeyHandler keyHandler;
-
     public GamePanel gamePanel;
-
     public int hasKey = 1;
 
     public Player(GamePanel gamePanel, KeyHandler keyHandler) {
@@ -26,7 +24,7 @@ public class Player extends Entity {
     public void setDefaultValue() {
         playerPositionX = 0;
         playerPositionY = 0;
-        playerSpeed = 2.0;
+        playerSpeed = 4;
     }
 
     public void getPlayerImage() {
@@ -52,13 +50,18 @@ public class Player extends Entity {
 
 
         if (collisionSlow) {
-            playerSpeed = 0.5;
+            playerSpeed = 1;
         } else {
-            playerSpeed = 2.0;
+            playerSpeed = 4;
         }
 
         if (KeyEnum.ENTER.getValue()) {
-            gamePanel.end = false;
+            if (gamePanel.closeGame) {
+                System.exit(0);
+            } else {
+                gamePanel.end = false;
+            }
+
         }
         if (!collisionOn && !collisionDoor && !gamePanel.end) {
             if (KeyEnum.NORTH.getValue()) {
@@ -103,39 +106,17 @@ public class Player extends Entity {
 
         BufferedImage image;
 
-        if (KeyEnum.NORTH.getValue()) {
-            if (runCount == 1) {
-                runCount = 2;
-            } else {
-                runCount = 1;
-            }
-        } else if (KeyEnum.SOUTH.getValue()) {
-            if (runCount == 1) {
-                runCount = 2;
-            } else {
-                runCount = 1;
-            }
-        } else if (KeyEnum.WEST.getValue()) {
-            if (runCount == 1) {
-                runCount = 2;
-            } else {
-                runCount = 1;
-            }
-        } else if (KeyEnum.EAST.getValue()) {
-            if (runCount == 1) {
-                runCount = 2;
-            } else {
-                runCount = 1;
-            }
-        }
-        if (runCount == 1) {
-            image = run1;
-        } else if (runCount == 2) {
-            image = run2;
+        if (KeyEnum.NORTH.getValue() || KeyEnum.SOUTH.getValue() || KeyEnum.WEST.getValue() || KeyEnum.EAST.getValue()) {
+            runCount = (runCount == 1) ? 2 : 1;
         } else {
-            image = stand;
-
+            runCount = 0;
         }
+
+        image = switch (runCount) {
+            case 1 -> run1;
+            case 2 -> run2;
+            default -> stand;
+        };
 
         graphics2D.drawImage(image, (int) playerPositionX, (int) playerPositionY, rectanglePlayer.width, rectanglePlayer.height, null);
 

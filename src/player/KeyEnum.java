@@ -5,7 +5,6 @@ public enum KeyEnum {
     SOUTH(false),
     EAST(false),
     WEST(false),
-
     ESC(false),
     ENTER(false);
 

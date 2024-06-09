@@ -74,7 +74,7 @@ public class StartPanel extends JPanel {
             grafic1.setForeground(Color.WHITE);
             grafic2.setForeground(Color.WHITE);
             grafic3.setForeground(Color.BLACK);
-            this.scale = 1;
+            this.scale = 3;
         });
         this.add(grafic3);
 
@@ -138,7 +138,7 @@ public class StartPanel extends JPanel {
         }
         frame.setResizable(false);
 
-        gamePanel.startGame();
+        gamePanel.run();
     }
 
     @Override
