@@ -8,7 +8,6 @@ public enum KeyEnum {
     ESC(false),
     ENTER(false);
 
-
     private boolean value;
 
     KeyEnum(boolean value) {

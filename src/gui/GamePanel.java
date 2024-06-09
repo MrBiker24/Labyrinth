@@ -33,7 +33,6 @@ public class GamePanel extends JPanel implements Runnable {
     public Item[] doors = new Item[10];
     public int mapCounter = 1;
     public int maxMapCounter = FolderContent.countFolderContents();
-
     public boolean end = false;
     public boolean closeGame = false;
 

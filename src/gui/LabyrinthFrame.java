@@ -23,7 +23,6 @@ public class LabyrinthFrame {
         GamePanel game = new GamePanel();
         StartPanel start = new StartPanel(game, mainPanel, frame);
 
-
         mainPanel.setLayout(cardLayout);
         mainPanel.add(start, START_PANEL);
         mainPanel.add(game, GAME_PANEL);
@@ -36,7 +35,6 @@ public class LabyrinthFrame {
 
         frame.setSize(500, 500);
 
-        frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
 }

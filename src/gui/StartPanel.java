@@ -32,7 +32,7 @@ public class StartPanel extends JPanel {
 
         JButton grafic1 = new JButton(Messages.getString("640_400"));
         JButton grafic2 = new JButton(Messages.getString("1280_800"));
-        JButton grafic3 = new JButton(Messages.getString("1920_1200"));
+        //JButton grafic3 = new JButton(Messages.getString("1920_1200"));
 
         grafic1.setBounds(50, 100, 100, 50);
         grafic1.setFont(new Font("Arial", Font.BOLD, 15));
@@ -43,7 +43,7 @@ public class StartPanel extends JPanel {
         grafic1.addActionListener(e -> {
             grafic1.setForeground(Color.BLACK);
             grafic2.setForeground(Color.WHITE);
-            grafic3.setForeground(Color.WHITE);
+            //grafic3.setForeground(Color.WHITE);
 
             this.scale = 1;
         });
@@ -59,12 +59,12 @@ public class StartPanel extends JPanel {
         grafic2.addActionListener(e -> {
             grafic1.setForeground(Color.WHITE);
             grafic2.setForeground(Color.BLACK);
-            grafic3.setForeground(Color.WHITE);
+            //grafic3.setForeground(Color.WHITE);
             this.scale = 2;
         });
         this.add(grafic2);
 
-        grafic3.setBounds(350, 100, 110, 50);
+        /*grafic3.setBounds(350, 100, 110, 50);
         grafic3.setFont(new Font("Arial", Font.BOLD, 15));
         grafic3.setOpaque(false);
         grafic3.setBackground(new Color(0, 100, 0, 64));
@@ -78,7 +78,7 @@ public class StartPanel extends JPanel {
         });
         this.add(grafic3);
 
-        /*JButton grafic4 = new JButton("Vollbild");
+        JButton grafic4 = new JButton("Vollbild");
         grafic4.setBounds(350, 200, 100, 50);
         grafic4.addActionListener(e -> this.scale = 999);
         this.add(grafic4);*/

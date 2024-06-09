@@ -2,6 +2,7 @@ package generator;
 
 import tile.TileImage;
 import tools.FolderContent;
+import tools.Messages;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,9 +32,8 @@ public class LabyrinthGenerator extends JFrame implements Runnable {
 
 
     public LabyrinthGenerator() {
-        setTitle("Labyrinth Generator");
+        setTitle(Messages.getString("Labyrinth_Generator"));
         setSize(screenWidth, screenHeight);
-
         new TileImage().loadTileImageGenerator();
 
         KeyHandlerGenerator keyHandlerGenerator = new KeyHandlerGenerator(this);
@@ -84,7 +84,7 @@ public class LabyrinthGenerator extends JFrame implements Runnable {
 
     private void initButtonPanel() {
         buttonPanel = new JPanel();
-        JButton generateButton = new JButton("Generate New Labyrinth");
+        JButton generateButton = new JButton(Messages.getString("Neues_Labyrinth"));
         generateButton.addActionListener(e -> {
             setInitialTiles();
             repaint();
@@ -92,7 +92,8 @@ public class LabyrinthGenerator extends JFrame implements Runnable {
         });
         buttonPanel.add(generateButton);
 
-        JButton saveButton = new JButton("Save Map");
+        JButton saveButton = new JButton(Messages.getString("Speichere_Labyrinth"));
+
         saveButton.addActionListener(e -> {
             saveTilesToFile();
             tilePanel.requestFocus();
@@ -119,12 +120,8 @@ public class LabyrinthGenerator extends JFrame implements Runnable {
         }
 
         switch (tileMap[col][row]) {
-            case 3, 4:
-                doorCount--;
-                break;
-            case 6:
-                endCount = 0;
-                break;
+            case 3, 4 -> doorCount--;
+            case 6 -> endCount = 0;
         }
 
         if (KeyEnumGenerator.ZERO.getValue()) {
@@ -154,7 +151,7 @@ public class LabyrinthGenerator extends JFrame implements Runnable {
         JFileChooser fileChooser = new JFileChooser(FolderContent.defaultDirectory);
         fileChooser.setSelectedFile(new File(defaultFileName));
 
-        fileChooser.setDialogTitle("Save Map to File");
+        fileChooser.setDialogTitle(Messages.getString("Save_To_File"));
         int userSelection = fileChooser.showSaveDialog(this);
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             final File fileToSave = fileChooser.getSelectedFile();

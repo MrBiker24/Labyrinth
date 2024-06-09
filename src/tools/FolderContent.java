@@ -4,7 +4,7 @@ import java.io.File;
 
 public class FolderContent {
 
-    public static String defaultDirectory = System.getProperty("user.dir") + "/resources/maps"; // Vordefinierter Ordnerpfad
+    public static String defaultDirectory = System.getProperty("user.dir") + "/resources/maps";
 
     public static int countFolderContents() {
         File folder = new File(defaultDirectory);
